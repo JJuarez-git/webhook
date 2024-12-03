@@ -1,1 +1,4 @@
-
+services:
+  expensify-api:
+    image: jjuarezdev/expensify-api:pro
+    container_name: expensify-api
