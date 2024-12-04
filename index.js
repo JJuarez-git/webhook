@@ -2,8 +2,8 @@ const http = require('http');
 const { exec } = require('child_process');
 const { argv } = require('process');
 
-const host = 'localhost';
-const port = argv[2];
+const host = argv[2];
+const port = argv[3];
 
 const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
