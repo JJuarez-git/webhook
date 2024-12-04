@@ -1,0 +1,15 @@
+http:
+  routers:
+    expensify-api-router:
+      rule: "Host(`api1.localhost`)"
+      entryPoints:
+        - websecure
+      service: api1
+      tls:
+        certResolver: myresolver
+
+  services:
+    expensify-api:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:5001"

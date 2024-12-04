@@ -1,4 +1,39 @@
 services:
+
+  traefik:
+    image: traefik:v3.2.1
+    container_name: traefik
+    command:
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
+    ports:
+      - 80:80/tcp
+      - 8080:8080/tcp
+      - 443:443/tcp
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml
+      - traefik-certificates:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - web
+
   expensify-api:
     image: jjuarezdev/expensify-api:pro
     container_name: expensify-api
+    expose:
+      - 5001:5001/tcp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.expensify-api-router.rule=Host(`expensify-api.localhost`)"
+      - "traefik.http.routers.expensify-api-router.entrypoints=websecure"
+      - "traefik.http.routers.expensify-api-router.tls.certresolver=myresolver"
+    networks:
+      - web
+
+
+volumes:
+  traefik-certificates:
+
+networks:
+  web:
+    external: false
